@@ -28,39 +28,59 @@ namespace dpeilitz_quicksort
             Console.WriteLine(output);
         }
         private static void SortArray(int[] numbers){
-            QuickSort(numbers, 0, numbers.Length - 1);
+                QuickSort(numbers, 0, numbers.Length - 1);
+                // TA BORT numbers.Sort();
         }
 
         private static void QuickSort(int[] numbers, int left, int right)
         {
             
             //  base case: array size <= 1
-            if(left < right){
+             if (numbers.Length < 100) {
+                InsertSort(numbers);
+                return;
+            } 
 
+            if (left >= right) {
+                return;
+            }
 
                 int pivot = Partition(numbers, left, right);
             
-                if (pivot > 1) {
-                    QuickSort(numbers, left, pivot - 1);
-                }
-                if (pivot + 1 < right) {
+                    QuickSort(numbers, left, pivot);
                     QuickSort(numbers, pivot + 1, right);
-                }
-            }
         }
         private static int Partition(int[] numbers, int left, int right)
-        {
-            int pivot = numbers[right];
-            int pivotIndex = left;
-            for(int i = left; i <= right; i++){
-                if (numbers[i] <= pivot){
-                    int temp = numbers[i];
-                    numbers[i] = numbers[pivotIndex];
-                    numbers[pivotIndex] = temp;
-                    pivotIndex++;
-                } 
+        {   
+            // choose the leftmost element as the pivot
+            int pivot = numbers[(left + right )/ 2 ];
+            int pivL = left - 1;
+            int pivR = right + 1;
+
+            while(true){   
+                while(numbers[++pivL] < pivot);
+                while(numbers[--pivR] > pivot);
+
+                if(pivL >= pivR){
+                    return pivR;
+                }
+                int temp = numbers[pivR];
+                numbers[pivR] = numbers[pivL];
+                numbers[pivL] = temp;
             }
-            return pivotIndex - 1;
         }
+        
+         private static void InsertSort(int[] numbers) {
+             for(int i = 1; i < numbers.Length; i++) {
+                 int key = numbers[i];
+                 int j = i-1;
+
+                 while(j >= 0 && numbers[j] > key){
+                     numbers[j+1] = numbers[j];
+                     j = j-1;
+                     numbers[j+1] = key;
+                 } 
+             }
+         }
     }
 }
